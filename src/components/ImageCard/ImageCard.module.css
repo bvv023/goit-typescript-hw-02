@@ -1,0 +1,14 @@
+.card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  width: 250px;
+  height: 150px;
+}
+
+.image {
+  object-fit: cover;
+  width: 250px;
+  height: 150px;
+}
