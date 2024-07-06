@@ -12,17 +12,23 @@ import { Toaster } from "react-hot-toast";
 
 const UNSPLASH_ACCESS_KEY = "3OlXvuZbRHK9s2Dy0FM9kwuZNu-SdkMmsN9gymFhE8k";
 
-interface Image {
+interface UnsplashUrls {
+  small: string;
+  regular: string;
+}
+
+interface UnsplashImage {
   id: string;
-  urls: {
-    small: string;
-    regular: string;
-  };
+  urls: UnsplashUrls;
   alt_description: string;
 }
 
+interface UnsplashResponse {
+  results: UnsplashImage[];
+}
+
 const App: React.FC = () => {
-  const [images, setImages] = useState<Image[]>([]);
+  const [images, setImages] = useState<UnsplashImage[]>([]);
   const [query, setQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
@@ -42,7 +48,7 @@ const App: React.FC = () => {
       setError("");
 
       try {
-        const response = await axios.get(
+        const response = await axios.get<UnsplashResponse>(
           "https://api.unsplash.com/search/photos",
           {
             params: { query, page, per_page: 14 },
@@ -54,7 +60,7 @@ const App: React.FC = () => {
 
         if (response.status === 200) {
           const newImages = response.data.results.filter(
-            (result: Image) => !images.find((image) => image.id === result.id)
+            (result: UnsplashImage) => !images.find((image) => image.id === result.id)
           );
 
           if (newImages.length === 0 && images.length > 0) {
